@@ -1,17 +1,17 @@
 import User from '../models/user'
 
 export const list = async (ctx, next) => {
-  const user = await User.findAll()
-  ctx.body = user
+  const { limit, offset } = ctx.query
+  const result = await User.findAll({ where: { isValid: true }, limit, offset })
+  ctx.body = result.length > 0 ? result : null
 
   next()
 }
 
-export const fineOne = async (ctx, next) => {
-  ctx.body = {
-    message: `kerker ${ctx.params.id}`,
-    query: ctx.query,
-  }
+export const findOne = async (ctx, next) => {
+  const { id } = ctx.params
+  const result = await User.findOne({ where: { id, isValid: true } })
+  ctx.body = result
 
   next()
 }

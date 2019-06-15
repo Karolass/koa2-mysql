@@ -6,7 +6,7 @@ const { db } = Config
 export const sequelize = new Sequelize(db.database, null, null, db)
 
 export const BaseModel = {
-  is_valid: {
+  isValid: {
     type: Sequelize.BOOLEAN,
     defaultValue: true,
   },

@@ -9,6 +9,6 @@ export default [
   {
     method: 'get',
     path: '/:id',
-    controller: controllers.user.fineOne,
+    controller: controllers.user.findOne,
   },
 ]
