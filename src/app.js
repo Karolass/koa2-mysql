@@ -6,6 +6,7 @@ import logger from 'koa-logger'
 import views from 'koa-views'
 import bodyParser from 'koa-bodyparser'
 import serve from 'koa-static2'
+import favicon from 'koa-favicon'
 
 // unit
 import router from './routes'
@@ -22,6 +23,7 @@ app
     textLimit: '5mb',
   }))
   .use(serve('public', path.resolve(__dirname, '../public')))
+  .use(favicon(`${path.resolve(__dirname, '../public')}/favicon.ico`))
   .use(views(`${__dirname}/views`, { extension: 'ejs' }))
   .use(router())
 
