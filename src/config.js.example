@@ -1,0 +1,37 @@
+export default {
+  projectName: 'Koa2 Server',
+  port: 3000,
+  db: {
+    database: 'test',
+    replication: {
+      read: [
+        {
+          host: 'localhost',
+          username: 'root',
+          password: 'passwd',
+          port: 3306,
+        },
+      ],
+      write: {
+        host: 'localhost',
+        username: 'root',
+        password: 'passwd',
+        port: 3306,
+      },
+    },
+    pool: {
+      max: 50,
+      min: 0,
+      acquire: 30000,
+      idle: 10000,
+    },
+    dialect: 'mysql',
+    define: {
+      freezeTableName: true,
+      underscored: true,
+    },
+    logging: false,
+  },
+  secret: 'my_koa_secret_string',
+  commitId: '',
+}
