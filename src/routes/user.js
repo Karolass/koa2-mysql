@@ -11,4 +11,19 @@ export default [
     path: '/:id',
     controller: controllers.user.findOne,
   },
+  {
+    method: 'post',
+    path: '/',
+    controller: controllers.user.create,
+  },
+  {
+    method: 'put',
+    path: '/:id',
+    controller: controllers.user.update,
+  },
+  {
+    method: 'delete',
+    path: '/:id',
+    controller: controllers.user.del,
+  },
 ]
