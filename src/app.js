@@ -47,7 +47,7 @@ app
   }))
   .use(serve('public', path.resolve(__dirname, '../public')))
   .use(favicon(`${path.resolve(__dirname, '../public')}/favicon.ico`))
-  .use(views(`${__dirname}/views`, { extension: 'ejs' }))
+  .use(views(`${path.resolve(__dirname, '../views')}`, { extension: 'ejs' }))
   .use(router())
 
 app.on('error', (err, ctx) => {
