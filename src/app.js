@@ -17,6 +17,29 @@ const app = new Koa()
 
 app
   .use(logger())
+  .use(async (ctx, next) => {
+    try {
+      await next()
+
+      // handle 404
+      const { status = 404 } = ctx
+      if (status === 404) {
+        ctx.throw(404)
+      }
+    } catch (err) {
+      ctx.status = err.status || 500
+
+      if (ctx.status === 404) {
+        ctx.body = '404 Not Found'
+      } else {
+        ctx.body = {
+          success: false,
+          message: err.message,
+        }
+        ctx.app.emit('error', err, ctx)
+      }
+    }
+  })
   .use(bodyParser({
     jsonLimit: '5mb',
     formLimit: '5mb',
@@ -26,6 +49,12 @@ app
   .use(favicon(`${path.resolve(__dirname, '../public')}/favicon.ico`))
   .use(views(`${__dirname}/views`, { extension: 'ejs' }))
   .use(router())
+
+app.on('error', (err, ctx) => {
+  const { message } = err
+  const { method, url, body } = ctx.request
+  console.error(`error: ${message}, method: ${method}, url: ${url}, body:`, body)
+})
 
 app.listen(Config.port, () => {
   console.log(`Server start on port ${Config.port}...`)
