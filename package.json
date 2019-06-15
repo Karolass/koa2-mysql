@@ -1,8 +1,7 @@
 {
   "name": "koa2-mysql",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Scaffold for koa2",
-  "main": "app.js",
   "scripts": {
     "test": "mocha --require @babel/register",
     "lint": "eslint src/*.js src/**/*.js --fix",
