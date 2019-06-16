@@ -15,18 +15,14 @@ import Config from './config'
 
 const app = new Koa()
 
-// no logger for testing
-if (process.env.NODE_ENV !== 'test') {
-  app.use(logger())
-}
-
 app
+  .use(logger())
   .use(async (ctx, next) => {
     try {
       await next()
 
       // handle 404
-      const { status = 404 } = ctx
+      const { status } = ctx
       if (status === 404) {
         ctx.throw(404)
       }
@@ -58,17 +54,11 @@ app.on('error', (err, ctx) => {
   const { message } = err
   const { method, url, body } = ctx.request
 
-  // no logger for testing
-  if (process.env.NODE_ENV !== 'test') {
-    console.error(`error: ${message}, method: ${method}, url: ${url}, body:`, body)
-  }
+  console.error(`error: ${message}, method: ${method}, url: ${url}, body:`, body)
 })
 
-// no run server for testing
-if (process.env.NODE_ENV !== 'test') {
-  app.listen(Config.port, () => {
-    console.log(`Server start on port ${Config.port}...`)
-  })
-}
+app.listen(Config.port, () => {
+  console.log(`Server start on port ${Config.port}...`)
+})
 
 export default app
