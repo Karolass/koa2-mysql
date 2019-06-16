@@ -1,26 +1,63 @@
 import app from "../src/app"
 import supertest from "supertest"
 
+const spyConsole = fn => {
+  let spy = {}
+
+  beforeAll(() => {
+    spy[fn] = jest.spyOn(console, fn).mockImplementation(() => {})
+  })
+
+  afterAll(() => {
+    spy[fn].mockRestore()
+  })
+
+  return spy
+}
+
 let server, request
 beforeAll(async () => {
-  server = await app.listen('3000')
+  server = app.listen(0)
   request = supertest(server)
 })
 
-afterAll(async () => {
-  await server.close()
+afterAll(async (done) => {
+  server.close(done)
 })
 
-describe(' test ', () => {
-  test(' pass ', () => {
-    expect(true).toBe(true)
+describe('app', () => {
+  const spy = spyConsole('error')
+
+  test("index html", async (done) => {
+    const response = await request.get('/')
+    expect(response.status).toEqual(200)
+    expect(response.type).toEqual('text/html')
+    expect(response.text).toContain('Koa2 Server')
+    done()
   })
 
-  test("should respond as expected", async (done) => {
-    const response = await request.get("/")
-    expect(response.status).toEqual(200)
-    // expect(response.type).toEqual("application/json")
-    // expect(response.body.data).toEqual("Sending some JSON")
+  test('404 Not Found', async () => {
+    const response = await request.get('/404-test')
+    expect(response.status).toEqual(404)
+    expect(response.type).toEqual('text/plain')
+    expect(response.text).toBe('404 Not Found')
+  })
+
+  test('app error handler', async (done) => {
+    app.use(async ctx => {
+      if (ctx.request.url === '/error-test') {
+        throw new Error('app error')
+      }
+    })
+
+    const response = await request.get('/error-test')
+    expect(response.status).toEqual(500)
+    expect(response.type).toEqual('application/json')
+    expect(response.body.success).toEqual(false)
+    expect(response.body.message).toEqual('app error')
+
+    expect(spy.error).toHaveBeenCalledTimes(1)
+    expect(spy.error.mock.calls[0][0]).toContain(`error: app error, method: GET, url: /error-test, body:`)
     done()
   })
 })

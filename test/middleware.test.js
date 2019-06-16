@@ -15,12 +15,3 @@ describe('middleware', () => {
     })
   })
 })
-
-import { mainRouter } from "../src/routes"
-
-test('123', async () => {
-  // const ctx = {}, noop = () => {}
-  // await route(ctx, noop)
-  console.log(mainRouter.routes().router.stack)
-  // expect(ctx).toStrictEqual({})
-})

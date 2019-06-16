@@ -41,6 +41,7 @@
   },
   "jest": {
     "verbose": true,
+    "silent": true,
     "testEnvironment": "node",
     "transform": {
       "^.+\\.js?$": "babel-jest"
