@@ -24,12 +24,10 @@ Object.keys(routeMap).forEach(key => {
 
       // offSetAndLimit for all get
       if (method === 'get') {
-        router[method](path, middleware.beforeAction.offSetAndLimit)
+        beforeAction.push(middleware.beforeAction.offSetAndLimit)
       }
 
-      router[method](path, ...beforeAction)
-      router[method](path, controller)
-      router[method](path, ...afterAction)
+      router[method](path, ...beforeAction, controller, ...afterAction)
     }
 
     mainRouter.use(key, router.routes())
