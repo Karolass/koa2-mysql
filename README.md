@@ -20,6 +20,9 @@ npm run lint
 # Sync Table Schema
 npm run sync-db
 
+# test
+npm run test
+
 # development
 npm run dev
 
