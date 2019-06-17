@@ -25,10 +25,15 @@ export default {
       acquire: 30000,
       idle: 10000,
     },
-    dialect: 'mysql',
+    dialect: 'mariadb',
     define: {
       freezeTableName: true,
       underscored: true,
+    },
+    dialectOptions: {
+      collate: 'utf8mb4_unicode_ci',
+      useUTC: true,
+      timezone: 'Etc/GMT0',
     },
     logging: false,
   },
