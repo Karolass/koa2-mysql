@@ -12,14 +12,12 @@ export const BaseModel = {
   },
 }
 
-// // test connection
-// if (process.env.NODE_ENV !== 'test') {
-//   sequelize
-//     .authenticate()
-//     .then(() => {
-//       console.log('Database connection has been established successfully.')
-//     })
-//     .catch(err => {
-//       console.error('Unable to connect to the database:', err)
-//     })
-// }
+// test connection
+export const testDBConnection = async seql => {
+  try {
+    await seql.authenticate()
+    console.log('Database connection has been established successfully.')
+  } catch (err) {
+    console.error('Unable to connect to the database:', err)
+  }
+}
