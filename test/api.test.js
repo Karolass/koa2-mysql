@@ -1,6 +1,9 @@
 import app from '../src/app'
 import User from '../src/models/user'
 import supertest from 'supertest'
+import fs from 'fs'
+import path from 'path'
+
 
 const request = supertest(app.callback())
 
@@ -15,7 +18,6 @@ afterAll(async () => {
 })
 
 describe('API', () => {
-  // const spy = spyConsole('error')
   describe('User', () => {
     let id
     const testUser = { email: 'test456@example.com', name: 'test name 2' }
@@ -94,6 +96,25 @@ describe('API', () => {
       expect(response.type).toEqual('application/json')
       expect(response.body.success).toBe(false)
       expect(response.body.message).toEqual('The id is not exists')
+    })
+  })
+
+  describe('Upload', () => {
+    afterAll(() => {
+      const filePath = path.resolve('public/uploads')
+      fs.readdirSync(filePath)
+        .filter(file => file !== '.gitkeep')
+        .forEach(async file => {
+          await fs.unlinkSync(path.resolve(filePath, file))
+        })
+    })
+
+    test('single', async () => {
+      const response = await request.post('/upload').attach('file', path.resolve('README.md'))
+      expect(response.status).toEqual(200)
+      expect(response.type).toEqual('application/json')
+      expect(response.body.fieldname).toEqual('file')
+      expect(response.body.originalname).toEqual('README.md')
     })
   })
 })

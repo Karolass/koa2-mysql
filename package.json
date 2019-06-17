@@ -18,12 +18,14 @@
     "koa-compose": "^4.1.0",
     "koa-favicon": "^2.0.1",
     "koa-logger": "^3.2.0",
+    "koa-multer": "^1.0.2",
     "koa-router": "^7.4.0",
     "koa-static2": "^0.1.8",
     "koa-views": "^6.2.0",
     "mariadb": "^2.0.5",
     "mysql2": "^1.6.5",
-    "sequelize": "^5.8.9"
+    "sequelize": "^5.8.9",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",

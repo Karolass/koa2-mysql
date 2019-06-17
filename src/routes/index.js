@@ -8,6 +8,14 @@ import Config from '../config'
 
 const routeMap = {
   '/user': user,
+  '/upload': [{
+    method: 'post',
+    path: '/',
+    beforeAction: [middleware.multer.single('file')],
+    controller: (ctx) => {
+      ctx.body = ctx.req.file
+    },
+  }],
 }
 
 export const proceedNestedRoute = routes => {
