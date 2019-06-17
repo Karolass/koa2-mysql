@@ -7,7 +7,7 @@
     "lint": "eslint src/*.js src/**/*.js --fix",
     "build": "npm run lint && babel src -d dist",
     "dev": "nodemon dev.js",
-    "start": "npm run build && pm2 start dist/app.js --name app --merge-logs --log-date-format='YYYY-MM-DD HH:mm:ss Z'",
+    "start": "npm run build && pm2 start dist/server.js --name app --merge-logs --log-date-format='YYYY-MM-DD HH:mm:ss Z'",
     "sync-db": "node sync.js"
   },
   "dependencies": {
@@ -20,6 +20,7 @@
     "koa-router": "^7.4.0",
     "koa-static2": "^0.1.8",
     "koa-views": "^6.2.0",
+    "mariadb": "^2.0.5",
     "mysql2": "^1.6.5",
     "sequelize": "^5.8.9"
   },
