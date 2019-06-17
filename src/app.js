@@ -11,8 +11,6 @@ import favicon from 'koa-favicon'
 // unit
 import router from './routes'
 
-import Config from './config'
-
 const app = new Koa()
 
 app
@@ -55,10 +53,6 @@ app.on('error', (err, ctx) => {
   const { method, url, body } = ctx.request
 
   console.error(`error: ${message}, method: ${method}, url: ${url}, body:`, body)
-})
-
-app.listen(Config.port, () => {
-  console.log(`Server start on port ${Config.port}...`)
 })
 
 export default app
