@@ -10,17 +10,14 @@ const routeMap = {
   '/user': user,
 }
 
-const mainRouter = new Router()
+export const proceedNestedRoute = routes => {
+  const router = new Router()
 
-// proceed route map
-Object.keys(routeMap).forEach(key => {
-  if (Array.isArray(routeMap[key])) {
-    const router = new Router()
-
-    for (let i = 0; i < routeMap[key].length; i++) {
+  if (Array.isArray(routes)) {
+    for (let i = 0; i < routes.length; i++) {
       const {
         method, path, controller, beforeAction = [], afterAction = [],
-      } = routeMap[key][i]
+      } = routes[i]
 
       // offSetAndLimit for all get
       if (method === 'get') {
@@ -29,10 +26,27 @@ Object.keys(routeMap).forEach(key => {
 
       router[method](path, ...beforeAction, controller, ...afterAction)
     }
-
-    mainRouter.use(key, router.routes())
+  } else {
+    Object.keys(routes).forEach(key => {
+      const nestedRouter = proceedNestedRoute(routes[key])
+      router.use(key, nestedRouter.routes())
+    })
   }
-})
+
+  return router
+}
+
+export const proceedRouteMap = (routes, router) => {
+  if (!routes || !router) return
+
+  Object.keys(routes).forEach(key => {
+    const nestedRouter = proceedNestedRoute(routes[key])
+    router.use(key, nestedRouter.routes())
+  })
+}
+
+const mainRouter = new Router()
+proceedRouteMap(routeMap, mainRouter)
 
 // index html
 mainRouter.get('/', async ctx => {
