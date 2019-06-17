@@ -1,4 +1,4 @@
-import middleware from "../src/middleware"
+import middleware from '../src/middleware'
 
 describe('middleware', () => {
   describe('beforeAction', () => {

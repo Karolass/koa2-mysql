@@ -1,11 +1,15 @@
-import app from "../src/app"
-import supertest from "supertest"
+import app from '../src/app'
+import supertest from 'supertest'
 
 const spyConsole = fn => {
   let spy = {}
 
   beforeAll(() => {
     spy[fn] = jest.spyOn(console, fn).mockImplementation(() => {})
+  })
+
+  afterEach(() => {
+    spy[fn].mockClear()
   })
 
   afterAll(() => {
@@ -15,25 +19,16 @@ const spyConsole = fn => {
   return spy
 }
 
-let server, request
-beforeAll(async () => {
-  server = app.listen(0)
-  request = supertest(server)
-})
-
-afterAll(async (done) => {
-  server.close(done)
-})
+const request = supertest(app.callback())
 
 describe('app', () => {
   const spy = spyConsole('error')
 
-  test("index html", async (done) => {
+  test("index html", async () => {
     const response = await request.get('/')
     expect(response.status).toEqual(200)
     expect(response.type).toEqual('text/html')
     expect(response.text).toContain('Koa2 Server')
-    done()
   })
 
   test('404 Not Found', async () => {
@@ -43,7 +38,7 @@ describe('app', () => {
     expect(response.text).toBe('404 Not Found')
   })
 
-  test('app error handler', async (done) => {
+  test('app error handler', async () => {
     app.use(async ctx => {
       if (ctx.request.url === '/error-test') {
         throw new Error('app error')
@@ -58,6 +53,5 @@ describe('app', () => {
 
     expect(spy.error).toHaveBeenCalledTimes(1)
     expect(spy.error.mock.calls[0][0]).toContain(`error: app error, method: GET, url: /error-test, body:`)
-    done()
   })
 })
