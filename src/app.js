@@ -7,6 +7,7 @@ import views from 'koa-views'
 import bodyParser from 'koa-bodyparser'
 import serve from 'koa-static2'
 import favicon from 'koa-favicon'
+import cors from '@koa/cors'
 
 // unit
 import router from './routes'
@@ -46,6 +47,7 @@ app
   .use(serve('public', path.resolve(__dirname, '../public')))
   .use(favicon(`${path.resolve(__dirname, '../public')}/favicon.ico`))
   .use(views(`${path.resolve(__dirname, '../views')}`, { extension: 'ejs' }))
+  .use(cors())
   .use(router())
 
 app.on('error', (err, ctx) => {
