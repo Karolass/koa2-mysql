@@ -10,35 +10,14 @@ import favicon from 'koa-favicon'
 import cors from '@koa/cors'
 
 // unit
+import middleware from './middleware'
 import router from './routes'
 
 const app = new Koa()
 
 app
   .use(logger())
-  .use(async (ctx, next) => {
-    try {
-      await next()
-
-      // handle 404
-      const { status } = ctx
-      if (status === 404) {
-        ctx.throw(404)
-      }
-    } catch (err) {
-      ctx.status = err.status || 500
-
-      if (ctx.status === 404) {
-        ctx.body = '404 Not Found'
-      } else {
-        ctx.body = {
-          success: false,
-          message: err.message,
-        }
-        ctx.app.emit('error', err, ctx)
-      }
-    }
-  })
+  .use(middleware.errorHandler)
   .use(bodyParser({
     jsonLimit: '5mb',
     formLimit: '5mb',
