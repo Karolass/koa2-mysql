@@ -34,7 +34,7 @@ export const proceedNestedRoute = routes => {
 
       router[method](path, ...beforeAction, controller, ...afterAction)
     }
-  } else {
+  } else if (routes instanceof Object) {
     Object.keys(routes).forEach(key => {
       const nestedRouter = proceedNestedRoute(routes[key])
       router.use(key, nestedRouter.routes())

@@ -1,4 +1,4 @@
-import { proceedRouteMap } from '../src/routes'
+import { proceedRouteMap, proceedNestedRoute } from '../src/routes'
 import Router from 'koa-router'
 
 describe('Route', () => {
@@ -39,11 +39,21 @@ describe('Route', () => {
         }]
       }
     }
+
     proceedRouteMap(routes, router)
     expect(router.stack).toHaveLength(2)
     expect(router.stack[0].methods).toEqual(['HEAD', 'GET'])
     expect(router.stack[1].methods).toEqual(['POST'])
     expect(router.stack[0].path).toEqual('/test/nested/')
     expect(router.stack[0].stack).toHaveLength(2)
+  })
+
+  test('proceedNestedRoute - neither array nor object', () => {
+    let router = proceedNestedRoute(null)
+    expect(router.stack).toHaveLength(0)
+    router = proceedNestedRoute('string')
+    expect(router.stack).toHaveLength(0)
+    router = proceedNestedRoute(123456)
+    expect(router.stack).toHaveLength(0)
   })
 })
